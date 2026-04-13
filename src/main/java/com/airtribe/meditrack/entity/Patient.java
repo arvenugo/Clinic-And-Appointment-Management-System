@@ -5,7 +5,7 @@ import com.airtribe.meditrack.util.IDGenerator;
 /**
  * Entity class representing Patient
  */
-public class Patient extends Person {
+public class Patient extends Person implements Cloneable {
 
 
     /**
@@ -27,7 +27,7 @@ public class Patient extends Person {
      */
     public Patient(String name, int age) {
         super(name, age);
-        id = IDGenerator.generateId();
+        id = IDGenerator.generatePatientId();
     }
 
     /**
