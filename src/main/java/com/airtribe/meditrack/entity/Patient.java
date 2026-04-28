@@ -1,5 +1,6 @@
 package com.airtribe.meditrack.entity;
 
+import com.airtribe.meditrack.interfaces.AppointmentObserver;
 import com.airtribe.meditrack.util.IDGenerator;
 
 /**
@@ -56,5 +57,6 @@ public class Patient extends Person implements Cloneable {
     public String getCurrApptStatus() {
         return currentAppointment.getApptStatus().toString();
     }
+
 
 }

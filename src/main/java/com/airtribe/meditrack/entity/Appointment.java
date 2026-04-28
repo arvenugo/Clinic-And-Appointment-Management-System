@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * Entity class representing appointment
  */
-public class Appointment implements Cloneable{
+public class Appointment implements Cloneable {
 
 
     /**
@@ -35,6 +35,7 @@ public class Appointment implements Cloneable{
      * The appt id
      */
     private final int apptId;
+
 
     /**
      * constr.
@@ -78,6 +79,42 @@ public class Appointment implements Cloneable{
      */
     public void updateApptTime(LocalDateTime apptTime) {
         this.apptTime = apptTime;
+    }
+
+    /**
+     * Get the appt ID
+     *
+     * @return
+     */
+    public int getApptId() {
+        return apptId;
+    }
+
+    /**
+     * Get the doctor
+     *
+     * @return
+     */
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    /**
+     * Get the patient
+     *
+     * @return
+     */
+    public Patient getPatient() {
+        return patient;
+    }
+
+    /**
+     * Get the appt time
+     *
+     * @return
+     */
+    public LocalDateTime getApptTime() {
+        return apptTime;
     }
 
 
