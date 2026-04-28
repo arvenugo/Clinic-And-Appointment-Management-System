@@ -41,7 +41,8 @@ public class AppointmentService {
 
 
         appointmentMap.put(appointment.getApptId(), appointment);
-
+        doctor.addAppointment(appointment);
+        patient.setCurrentAppointment(appointment);
         notifyObservers("Appointment created", appointment);
         return appointment;
     }
@@ -74,6 +75,7 @@ public class AppointmentService {
             throw new AppointmentNotFoundException("Cannot delete. Appointment not found: " + id);
         }
         Appointment appt = getAppointmentById(id);
+        appt.getDoctor().removeAppointment(appt);
         notifyObservers("Appointment cancelled", appt);
         appt.setApptStatus(AppointmentStatus.CANCELLED);
     }

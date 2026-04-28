@@ -24,7 +24,7 @@ public class Appointment implements Cloneable {
     /**
      * Patient
      */
-    private final Patient patient;
+    private Patient patient;
 
     /**
      * The appt time
@@ -52,6 +52,27 @@ public class Appointment implements Cloneable {
         this.apptStatus = AppointmentStatus.CONFIRMED;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Appointment cloned = (Appointment) super.clone();
+
+        //  Deep copy
+        if (this.patient != null) {
+            cloned.patient = (Patient) this.patient.clone();
+        }
+
+        if (this.doctor != null) {
+            cloned.doctor = (Doctor) this.doctor.clone();
+        }
+
+        // LocalDateTime is immutable → safe to assign directly
+        cloned.apptTime = this.apptTime;
+
+        // Enum is immutable → safe
+        cloned.apptStatus = this.apptStatus;
+
+        return cloned;
+    }
 
     /**
      * Get the appt status

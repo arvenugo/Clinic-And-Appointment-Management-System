@@ -1,6 +1,5 @@
 package com.airtribe.meditrack.entity;
 
-import com.airtribe.meditrack.interfaces.AppointmentObserver;
 import com.airtribe.meditrack.util.IDGenerator;
 
 /**
@@ -12,7 +11,7 @@ public class Patient extends Person implements Cloneable {
     /**
      * patient id
      */
-    private final int pateintId;
+    private final int patientId;
 
     /**
      * Current appointment
@@ -28,7 +27,24 @@ public class Patient extends Person implements Cloneable {
      */
     public Patient(String name, int age) {
         super(name, age);
-        pateintId = IDGenerator.generatePatientId();
+        patientId = IDGenerator.generatePatientId();
+    }
+
+    /**
+     * Clonable.
+     *
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Patient cloned = (Patient) super.clone();
+
+        if (this.currentAppointment != null) {
+            cloned.currentAppointment = (Appointment) this.currentAppointment.clone();
+        }
+
+        return cloned;
     }
 
     /**
@@ -37,7 +53,7 @@ public class Patient extends Person implements Cloneable {
      * @return int
      */
     public int getPatientId() {
-        return pateintId;
+        return patientId;
     }
 
     /**
@@ -47,6 +63,15 @@ public class Patient extends Person implements Cloneable {
      */
     public void setCurrentAppointment(Appointment appt) {
         currentAppointment = appt;
+    }
+
+    /**
+     * Get current appt
+     *
+     * @return
+     */
+    public Appointment getCurrentAppointment() {
+        return currentAppointment;
     }
 
     /**

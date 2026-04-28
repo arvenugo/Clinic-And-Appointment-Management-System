@@ -5,10 +5,11 @@ package com.airtribe.meditrack.entity;
  */
 public class Person {
 
+
     /**
      * Name of the person
      */
-    private final String name;
+    private String name;
 
     /**
      * Age of the person
@@ -42,6 +43,25 @@ public class Person {
      */
     public int getAge() {
         return age;
+    }
+
+
+    /**
+     * Set name
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Set age
+     *
+     * @param age
+     */
+    public void setAge(int age) {
+        this.age = age;
     }
 
 
