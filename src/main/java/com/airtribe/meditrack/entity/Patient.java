@@ -11,7 +11,7 @@ public class Patient extends Person implements Cloneable {
     /**
      * patient id
      */
-    private final int pateintId;
+    private final int id;
 
     /**
      * Current appointment
@@ -25,9 +25,10 @@ public class Patient extends Person implements Cloneable {
      * @param name
      * @param age
      */
-    public Patient(String name, int age) {
+    public Patient(String name, int age, Appointment currentAppointment) {
         super(name, age);
-        pateintId = IDGenerator.generatePatientId();
+        this.id = IDGenerator.generatePatientId();
+        this.currentAppointment = currentAppointment;
     }
 
     /**
@@ -36,7 +37,7 @@ public class Patient extends Person implements Cloneable {
      * @return int
      */
     public int getPatientId() {
-        return pateintId;
+        return id;
     }
 
     /**
@@ -56,5 +57,8 @@ public class Patient extends Person implements Cloneable {
     public String getCurrApptStatus() {
         return currentAppointment.getApptStatus().toString();
     }
+
+	
+    
 
 }
