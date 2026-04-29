@@ -7,15 +7,30 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class IDGenerator {
 
+	/**
+	 * singleton instance
+	 */
+    private static final IdGenerator instance = new IdGenerator();
+
     /**
      * counter obj for patient id
      */
-    private static final AtomicInteger patientIdCounter = new AtomicInteger(0);
+    private AtomicInteger patientIdCounter = new AtomicInteger(0);
 
     /**
      * counter obj for appt id
      */
-    private static final AtomicInteger apptIdCounter = new AtomicInteger(0);
+    private  AtomicInteger apptIdCounter = new AtomicInteger(0);
+
+    // Private constructor
+    private IdGenerator() {
+        patientIdCounter = new AtomicInteger(0);
+        appointmentIdCounter = new AtomicInteger(0);
+    }
+ // Global access
+    public static IdGenerator getInstance() {
+        return instance;
+    }
 
     /**
      * Generate the patient id
