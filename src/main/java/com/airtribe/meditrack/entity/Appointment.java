@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * Entity class representing appointment
  */
-public class Appointment implements Cloneable{
+public class Appointment implements Cloneable {
 
 
     /**
@@ -24,7 +24,7 @@ public class Appointment implements Cloneable{
     /**
      * Patient
      */
-    private final Patient patient;
+    private Patient patient;
 
     /**
      * The appt time
@@ -35,6 +35,7 @@ public class Appointment implements Cloneable{
      * The appt id
      */
     private final int apptId;
+
 
     /**
      * constr.
@@ -51,6 +52,27 @@ public class Appointment implements Cloneable{
         this.apptStatus = AppointmentStatus.CONFIRMED;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Appointment cloned = (Appointment) super.clone();
+
+        //  Deep copy
+        if (this.patient != null) {
+            cloned.patient = (Patient) this.patient.clone();
+        }
+
+        if (this.doctor != null) {
+            cloned.doctor = (Doctor) this.doctor.clone();
+        }
+
+        // LocalDateTime is immutable → safe to assign directly
+        cloned.apptTime = this.apptTime;
+
+        // Enum is immutable → safe
+        cloned.apptStatus = this.apptStatus;
+
+        return cloned;
+    }
 
     /**
      * Get the appt status
@@ -78,6 +100,42 @@ public class Appointment implements Cloneable{
      */
     public void updateApptTime(LocalDateTime apptTime) {
         this.apptTime = apptTime;
+    }
+
+    /**
+     * Get the appt ID
+     *
+     * @return
+     */
+    public int getApptId() {
+        return apptId;
+    }
+
+    /**
+     * Get the doctor
+     *
+     * @return
+     */
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    /**
+     * Get the patient
+     *
+     * @return
+     */
+    public Patient getPatient() {
+        return patient;
+    }
+
+    /**
+     * Get the appt time
+     *
+     * @return
+     */
+    public LocalDateTime getApptTime() {
+        return apptTime;
     }
 
 

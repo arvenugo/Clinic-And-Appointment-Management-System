@@ -33,6 +33,11 @@ public class IDGenerator {
     }
 
     /**
+     * counter obj for doctor id
+     */
+    private static final AtomicInteger docIdCounter = new AtomicInteger(0);
+
+    /**
      * Generate the patient id
      *
      * @return int
@@ -49,5 +54,15 @@ public class IDGenerator {
      */
     public static int generateApptId() {
         return patientIdCounter.incrementAndGet(); // thread-safe increment
+    }
+
+
+    /**
+     * Generate the appt id
+     *
+     * @return int
+     */
+    public static int generateDoctorId() {
+        return docIdCounter.incrementAndGet(); // thread-safe increment
     }
 }
