@@ -93,7 +93,8 @@ public class CSVUtil {
 				        int patientId = Integer.parseInt(values[1]);
 				        Patient patient = patientsMap.get(patientId);
 				        LocalDateTime appointmentTime = LocalDateTime.parse(values[2]);
-				        Appointment appointment = new Appointment(doctor,patient,appointmentTime);
+				        String complaints = values[3];
+				        Appointment appointment = new Appointment(doctor,patient,appointmentTime,complaints);
 				    }
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
