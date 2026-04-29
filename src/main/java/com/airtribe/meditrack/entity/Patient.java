@@ -11,7 +11,7 @@ public class Patient extends Person implements Cloneable {
     /**
      * patient id
      */
-    private final int id;
+    private final int patientId;
 
     /**
      * Current appointment
@@ -25,10 +25,26 @@ public class Patient extends Person implements Cloneable {
      * @param name
      * @param age
      */
-    public Patient(String name, int age, Appointment currentAppointment) {
+    public Patient(String name, int age) {
         super(name, age);
-        this.id = IDGenerator.generatePatientId();
-        this.currentAppointment = currentAppointment;
+        patientId = IDGenerator.generatePatientId();
+    }
+
+    /**
+     * Clonable.
+     *
+     * @return
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Patient cloned = (Patient) super.clone();
+
+        if (this.currentAppointment != null) {
+            cloned.currentAppointment = (Appointment) this.currentAppointment.clone();
+        }
+
+        return cloned;
     }
 
     /**
@@ -37,7 +53,7 @@ public class Patient extends Person implements Cloneable {
      * @return int
      */
     public int getPatientId() {
-        return id;
+        return patientId;
     }
 
     /**
@@ -50,6 +66,15 @@ public class Patient extends Person implements Cloneable {
     }
 
     /**
+     * Get current appt
+     *
+     * @return
+     */
+    public Appointment getCurrentAppointment() {
+        return currentAppointment;
+    }
+
+    /**
      * Get the status of current patient appt
      *
      * @return String
@@ -58,7 +83,5 @@ public class Patient extends Person implements Cloneable {
         return currentAppointment.getApptStatus().toString();
     }
 
-	
-    
 
 }
