@@ -35,6 +35,8 @@ public class Appointment implements Cloneable {
      * The appt id
      */
     private final int apptId;
+    
+    private boolean completed;
 
 
     /**
