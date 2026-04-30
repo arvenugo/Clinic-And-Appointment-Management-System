@@ -35,6 +35,10 @@ public class Appointment implements Cloneable {
      * The appt id
      */
     private final int apptId;
+    
+    private boolean completed;
+    
+    private String complaints;
 
 
     /**
@@ -44,12 +48,13 @@ public class Appointment implements Cloneable {
      * @param patient
      * @param apptTime
      */
-    public Appointment(Doctor doctor, Patient patient, LocalDateTime apptTime) {
+    public Appointment(Doctor doctor, Patient patient, LocalDateTime apptTime,String complaints) {
         this.doctor = doctor;
         this.patient = patient;
         this.apptTime = apptTime;
         this.apptId = IDGenerator.generateApptId();
         this.apptStatus = AppointmentStatus.CONFIRMED;
+        this.complaints = complaints;
     }
 
     @Override

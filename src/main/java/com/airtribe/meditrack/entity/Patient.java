@@ -1,5 +1,7 @@
 package com.airtribe.meditrack.entity;
 
+import java.util.List;
+
 import com.airtribe.meditrack.util.IDGenerator;
 
 /**
@@ -16,19 +18,18 @@ public class Patient extends Person implements Cloneable {
     /**
      * Current appointment
      */
-    private Appointment currentAppointment;
+    private List<Appointment> appointments;
 
+    
 
     /**
-     * Constr.
-     *
-     * @param name
-     * @param age
-     */
-    public Patient(String name, int age) {
-        super(name, age);
-        patientId = IDGenerator.generatePatientId();
-    }
+	 * @param name
+	 * @param age
+	 */
+	public Patient(String name, int age) {
+		super(name, age);
+		this.patientId = IDGenerator.generatePatientId();
+	}
 
     /**
      * Clonable.
@@ -40,8 +41,9 @@ public class Patient extends Person implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         Patient cloned = (Patient) super.clone();
 
-        if (this.currentAppointment != null) {
-            cloned.currentAppointment = (Appointment) this.currentAppointment.clone();
+        if (this.appointments != null) {
+        	cloned.appointments.addAll(this.appointments);
+
         }
 
         return cloned;
@@ -56,32 +58,32 @@ public class Patient extends Person implements Cloneable {
         return patientId;
     }
 
-    /**
-     * Set current appointment
-     *
-     * @param appt
-     */
-    public void setCurrentAppointment(Appointment appt) {
-        currentAppointment = appt;
-    }
+    
 
     /**
-     * Get current appt
+	 * @return the appointments
+	 */
+	public List<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	/**
+	 * @param appointments the appointments to set
+	 */
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
+	}
+	
+	/**
+     * Add an appointment
      *
-     * @return
+     * @param apt
      */
-    public Appointment getCurrentAppointment() {
-        return currentAppointment;
+    public void addAppointment(Appointment apt) {
+    	appointments.add(apt);
     }
 
-    /**
-     * Get the status of current patient appt
-     *
-     * @return String
-     */
-    public String getCurrApptStatus() {
-        return currentAppointment.getApptStatus().toString();
-    }
 
+	
 
 }
