@@ -11,7 +11,6 @@ public class Bill implements Payable{
 	private String particulars;
 	
 	private BigDecimal amount;
-	
 
 
 	/**

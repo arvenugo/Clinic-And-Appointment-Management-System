@@ -73,6 +73,16 @@ public class Patient extends Person implements Cloneable {
 	public void setAppointments(List<Appointment> appointments) {
 		this.appointments = appointments;
 	}
+	
+	/**
+     * Add an appointment
+     *
+     * @param apt
+     */
+    public void addAppointment(Appointment apt) {
+    	appointments.add(apt);
+    }
+
 
 	
 
