@@ -8,6 +8,7 @@ import com.airtribe.meditrack.enums.AppointmentStatus;
 import com.airtribe.meditrack.exception.AppointmentNotFoundException;
 import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.AppointmentObserver;
+import com.airtribe.meditrack.util.DateUtil;
 
 
 import java.time.LocalDateTime;
@@ -27,17 +28,18 @@ public class AppointmentService {
     /**
      * Create Appointment
      */
-    public Appointment createAppointment(Patient patient, Doctor doctor, LocalDateTime dateTime,String complaints) throws InvalidDataException {
+    public Appointment createAppointment(Patient patient, Doctor doctor, LocalDateTime dateTime, String complaints) throws InvalidDataException {
 
 
-        if (dateTime == null || dateTime.isBefore(LocalDateTime.now())) {
+        if (dateTime == null || DateUtil.validateFutureOrToday(dateTime)) {
+
             throw new InvalidDataException("Invalid appointment time");
         }
 
 
         Appointment appointment = new Appointment(doctor, patient,
 
-                dateTime,complaints);
+                dateTime, complaints);
 
 
         appointmentMap.put(appointment.getApptId(), appointment);
@@ -64,7 +66,11 @@ public class AppointmentService {
      * View all the appointments
      */
     public List<Appointment> getAllAppointments() {
-        return new ArrayList<>(appointmentMap.values());
+
+        Comparator<Appointment> dateComparator = Comparator.comparing(Appointment::getApptTime);
+        List<Appointment> apptList = new ArrayList<>(appointmentMap.values());
+        apptList.sort(dateComparator);
+        return apptList;
     }
 
     /**
@@ -87,7 +93,7 @@ public class AppointmentService {
     public void rescheduleAppointment(int id, LocalDateTime newDateTime) throws InvalidDataException {
         Appointment appt = getAppointmentById(id);
 
-        if (newDateTime == null || newDateTime.isBefore(LocalDateTime.now())) {
+        if (newDateTime == null || DateUtil.validateFutureOrToday(newDateTime)) {
             throw new InvalidDataException("Invalid appointment time");
         }
         notifyObservers("Appointment updated", appt);

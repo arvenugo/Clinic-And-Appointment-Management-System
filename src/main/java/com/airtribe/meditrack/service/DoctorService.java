@@ -6,6 +6,7 @@ import com.airtribe.meditrack.enums.DoctorSpecialization;
 
 import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.Searchable;
+import com.airtribe.meditrack.util.Validator;
 
 
 import java.util.*;
@@ -28,8 +29,10 @@ public class DoctorService implements Searchable<Doctor> {
      * @param fees
      * @return
      */
-    public Doctor createDoctor(String name, int age, String hospName, DoctorSpecialization spec, double fees) {
-
+    public Doctor createDoctor(String name, int age, String hospName, DoctorSpecialization spec, double fees) throws InvalidDataException {
+        Validator.validateName(name);
+        Validator.validateAge(age);
+       Validator.validateName(hospName);
 
         Doctor doctor = new Doctor(name, age, hospName, spec, fees);
         doctorMap.put(doctor.getDoctorId(), doctor);
