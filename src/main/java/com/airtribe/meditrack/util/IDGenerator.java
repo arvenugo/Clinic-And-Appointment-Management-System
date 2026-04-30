@@ -10,7 +10,7 @@ public class IDGenerator {
 	/**
 	 * singleton instance
 	 */
-    private static final IdGenerator instance = new IdGenerator();
+    private static final IDGenerator instance = new IDGenerator();
 
     /**
      * counter obj for patient id
@@ -23,12 +23,12 @@ public class IDGenerator {
     private  AtomicInteger apptIdCounter = new AtomicInteger(0);
 
     // Private constructor
-    private IdGenerator() {
+    private IDGenerator() {
         patientIdCounter = new AtomicInteger(0);
         appointmentIdCounter = new AtomicInteger(0);
     }
  // Global access
-    public static IdGenerator getInstance() {
+    public static IDGenerator getInstance() {
         return instance;
     }
 
