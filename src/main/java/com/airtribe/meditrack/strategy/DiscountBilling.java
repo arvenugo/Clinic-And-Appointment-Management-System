@@ -1,4 +1,4 @@
-package com.airtribe.meditrack.service;
+package com.airtribe.meditrack.strategy;
 
 public class NormalBilling implements BillingStrategy {
 	@Override
