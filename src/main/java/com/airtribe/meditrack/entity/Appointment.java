@@ -38,7 +38,7 @@ public class Appointment implements Cloneable {
     
     private boolean completed;
     
-    private String complaints;
+    private String symptoms;
 
 
     /**
@@ -54,7 +54,7 @@ public class Appointment implements Cloneable {
         this.apptTime = apptTime;
         this.apptId = IDGenerator.generateApptId();
         this.apptStatus = AppointmentStatus.CONFIRMED;
-        this.complaints = complaints;
+        this.symptoms = complaints;
     }
 
     @Override
@@ -142,6 +142,36 @@ public class Appointment implements Cloneable {
     public LocalDateTime getApptTime() {
         return apptTime;
     }
+
+	/**
+	 * @return the completed
+	 */
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	/**
+	 * @param completed the completed to set
+	 */
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	/**
+	 * @return the symptoms
+	 */
+	public String getSymptoms() {
+		return symptoms;
+	}
+
+	/**
+	 * @param symptoms the symptoms to set
+	 */
+	public void setSymptoms(String symptoms) {
+		this.symptoms = symptoms;
+	}
+    
+    
 
 
 }

@@ -1,4 +1,4 @@
-package com.airtribe.meditrack.interfaces;
+package com.airtribe.meditrack.strategy;
 
 public interface BillingStrategy  {
 

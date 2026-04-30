@@ -5,23 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.airtribe.meditrack.entity.Appointment;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.enums.DoctorSpecialization;
+import com.airtribe.meditrack.exception.InvalidDataException;
 
 public class CSVUtil {
 	
-	static Map<Integer,Doctor> doctorsMap = new HashMap<Integer,Doctor>();
-	static List<Doctor> doctorsList = new ArrayList<>();
-	static List<Patient> patientsList = new ArrayList<>();
-	static Map<Integer,Patient> patientsMap = new HashMap<Integer,Patient>();
-	static List<Appointment> appointmentsList = new ArrayList<>();
+	static DataStore<Patient> patientData = new DataStore<Patient>();
+	static DataStore<Doctor> doctorData = new DataStore<Doctor>();
 	
 	public static void loadDoctors() {
 		try (BufferedReader br = new BufferedReader(new FileReader("doctors.csv"))) {
@@ -36,8 +30,8 @@ public class CSVUtil {
 			        DoctorSpecialization doctorSpecialization = DoctorSpecialization.valueOf(values[3]);
 			        double consultationFees = Double.parseDouble(values[3]);
 			        Doctor doctor = new Doctor(name, age,hospitalName,doctorSpecialization,consultationFees);
-			        doctorsList.add(doctor);
-			        doctorsMap.put(doctor.getDoctorId(),doctor);
+			        doctorData.add(doctor);
+			   
 			    }
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -64,7 +58,7 @@ public class CSVUtil {
 			        String name = values[0];
 			        int age = Integer.parseInt(values[1]);
 			        Patient patient = new Patient(name,age);
-			        patientsList.add(patient);
+			        patientData.add(patient);
 			    }
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -89,11 +83,14 @@ public class CSVUtil {
 				    while ((line = br.readLine()) != null) {
 				        String[] values = line.split(",");
 				        int doctorId = Integer.parseInt(values[0]);
-				        Doctor doctor = doctorsMap.get(doctorId);  
+				        Doctor doctor = doctorData.getAll().stream().filter(d -> d.getDoctorId() == doctorId).findFirst().orElse(null);
 				        int patientId = Integer.parseInt(values[1]);
-				        Patient patient = patientsMap.get(patientId);
+				        Patient patient = patientData.getAll().stream().filter(p -> p.getPatientId() == patientId).findFirst().orElse(null);
 				        LocalDateTime appointmentTime = LocalDateTime.parse(values[2]);
 				        String complaints = values[3];
+				        if(doctor == null || patient == null) {
+				        	throw new InvalidDataException("Invalid doctorId or PatientId");
+				        }
 				        Appointment appointment = new Appointment(doctor,patient,appointmentTime,complaints);
 				    }
 				} catch (IOException e) {
