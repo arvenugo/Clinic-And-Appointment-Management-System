@@ -83,6 +83,23 @@ public class Patient extends Person implements Cloneable {
     	appointments.add(apt);
     }
 
+	/**
+	 * If patiend ID is the same , it is considered to be same
+	 * @param o   the reference object with which to compare.
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Patient)) return false;
+		Patient patient = (Patient) o;
+		return patientId == patient.patientId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(patientId);
+	}
 
 	
 
