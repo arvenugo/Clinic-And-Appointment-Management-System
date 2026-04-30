@@ -1,6 +1,6 @@
 package com.airtribe.meditrack.strategy;
 
-public interface BillingStrategy  {
+public interface BillingStrategy{
 
     double calculate(double amount);
 
