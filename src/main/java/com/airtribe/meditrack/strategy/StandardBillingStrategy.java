@@ -17,7 +17,8 @@ public class StandardBillingStrategy implements BillingStrategy {
         BigDecimal itemsTotal = bill.getItems().values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal subTotal = bill.getConsultationFee().add(itemsTotal);
+        BigDecimal subTotal = BigDecimal.valueOf(bill.getConsultationFee())
+                .add(itemsTotal);
 
         BigDecimal tax = subTotal.multiply(TAX);
         BigDecimal discount = subTotal.multiply(DISCOUNT);

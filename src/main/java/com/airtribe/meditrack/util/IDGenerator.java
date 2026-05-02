@@ -65,11 +65,11 @@ public class IDGenerator {
      *
      * @return int
      */
-    public static int generateDoctorId() {
+    public  static int generateDoctorId() {
         return docIdCounter.incrementAndGet(); // thread-safe increment
     }
     
-    public static int generateBillId() {
+    public int generateBillId() {
         return billIdCounter.incrementAndGet(); // thread-safe increment
     }
 }

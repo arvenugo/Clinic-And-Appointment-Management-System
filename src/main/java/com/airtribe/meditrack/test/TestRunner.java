@@ -44,10 +44,10 @@ public class TestRunner {
             LocalDateTime apptTime = LocalDateTime.now().plusDays(2);
 
             Appointment appointment = appointmentService.createAppointment(pat1, doc1, apptTime, "Heart ache");
-            System.out.println("Created Appointment ID: " + appointment.getApptId());
+            System.out.println("Created Appointment ID: " + appointment.getId());
 
             // Reschedule
-            appointmentService.rescheduleAppointment(appointment.getApptId(), apptTime.plusHours(2));
+            appointmentService.rescheduleAppointment(appointment.getId(), apptTime.plusHours(2));
             System.out.println("Appointment rescheduled to: " + appointment.getApptTime());
 
             // 6. Search Functionality
@@ -63,7 +63,7 @@ public class TestRunner {
             System.out.println("\nAverage Consultation Fee: $" + avgFee);
 
             // 8. Cancellation
-            appointmentService.cancelAppointment(appointment.getApptId());
+            appointmentService.cancelAppointment(appointment.getId());
             System.out.println("Appointment status after cancellation: " + appointment.getApptStatus());
 
 

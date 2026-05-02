@@ -1,11 +1,12 @@
 package com.airtribe.meditrack.entity;
 
 import com.airtribe.meditrack.enums.Gender;
+import com.airtribe.meditrack.util.IDGenerator;
 
 /**
  * Entity representing a person
  */
-public class Person {
+public class Person extends MedicalEntity{
 
 
     /**
@@ -19,6 +20,7 @@ public class Person {
     private int age;
     
     private Gender gender;
+    
 
     /**
      * Constr.
@@ -26,19 +28,22 @@ public class Person {
      * @param name
      * @param age
      */
-    public Person(String name, int age) {
+    public Person(String name, int age,int id) {
+    	super(id);
         this.name = name;
         this.age = age;
     }
     
-    
+  
 
-    /**
-	 * 
+
+	/**
+	 * @param id
 	 */
-	public Person() {
-		super();
+	public Person(Integer id) {
+		super(id);
 	}
+
 
 
 
@@ -78,6 +83,25 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
+
+
+
+	/**
+	 * @return the gender
+	 */
+	public Gender getGender() {
+		return gender;
+	}
+
+
+
+	/**
+	 * @param gender the gender to set
+	 */
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
 
 
 }

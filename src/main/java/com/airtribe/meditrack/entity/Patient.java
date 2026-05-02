@@ -1,6 +1,7 @@
 package com.airtribe.meditrack.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.airtribe.meditrack.enums.Gender;
@@ -12,15 +13,11 @@ import com.airtribe.meditrack.util.IDGenerator;
 public class Patient extends Person implements Cloneable{
 
 
-    /**
-     * patient id
-     */
-    private final int patientId;
-
+   
     /**
      * Current appointment
      */
-    private List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();;
     
     private LocalDateTime registrationDate;
     
@@ -33,8 +30,7 @@ public class Patient extends Person implements Cloneable{
 	 * @param age
 	 */
 	public Patient(String name, int age, Gender gender) {
-		super(name, age);
-		this.patientId = IDGenerator.generatePatientId();
+		super(name, age, IDGenerator.generatePatientId());
 		this.gender = gender;
 		this.registrationDate = LocalDateTime.now();
 	}
@@ -47,8 +43,7 @@ public class Patient extends Person implements Cloneable{
 	 * @param patientId
 	 */
 	public Patient(int patientId,String name, int age) {
-		super(name, age);
-		this.patientId = patientId;
+		super(name, age,patientId);
 	}
 
 
@@ -72,16 +67,6 @@ public class Patient extends Person implements Cloneable{
 
         return cloned;
     }
-
-    /**
-     * Get the patient id
-     *
-     * @return int
-     */
-    public int getPatientId() {
-        return patientId;
-    }
-
     
 
     /**
@@ -117,12 +102,12 @@ public class Patient extends Person implements Cloneable{
 		if (this == o) return true;
 		if (!(o instanceof Patient)) return false;
 		Patient patient = (Patient) o;
-		return patientId == patient.patientId;
+		return super.getId() == patient.getId();
 	}
 
 	@Override
 	public int hashCode() {
-		return Integer.hashCode(patientId);
+		return Integer.hashCode(getId());
 	}
 
 	

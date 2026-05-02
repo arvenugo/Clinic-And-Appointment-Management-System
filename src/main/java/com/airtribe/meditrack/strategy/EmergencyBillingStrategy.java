@@ -16,9 +16,11 @@ public class EmergencyBillingStrategy implements BillingStrategy {
         BigDecimal itemsTotal = bill.getItems().values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal subTotal = bill.getConsultationFee().add(itemsTotal);
+        BigDecimal subTotal = BigDecimal.valueOf(bill.getConsultationFee())
+                .add(itemsTotal);
+
         BigDecimal surcharge = subTotal.multiply(SURCHARGE);
-        BigDecimal tax = (subTotal.add(surcharge)).multiply(TAX);
+        BigDecimal tax = subTotal.add(surcharge).multiply(TAX);
 
         BigDecimal finalAmount = subTotal.add(surcharge).add(tax);
 

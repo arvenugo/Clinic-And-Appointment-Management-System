@@ -2,50 +2,51 @@ package com.airtribe.meditrack.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class DataStore<T> {
+import com.airtribe.meditrack.entity.MedicalEntity;
+import com.airtribe.meditrack.entity.Person;
 
-    private List<T> dataList;
+public class DataStore<T extends MedicalEntity> {
 
-    public DataStore() {
-        this.dataList = new ArrayList<T>();
+    private final Map<Integer, T> store = new ConcurrentHashMap<>();
+
+    // Save or update
+    public void save(T entity) {
+        Objects.requireNonNull(entity, "entity cannot be null");
+        store.put(entity.getId(), entity);
     }
 
-    // Add item
-    public void add(T item) {
-        dataList.add(item);
+    // Find by ID
+    public Optional<T> findById(int id) {
+        return Optional.ofNullable(store.get(id));
     }
 
-    // Get all items
-    public List<T> getAll() {
-        return new ArrayList<>(dataList); // return copy for safety
+    // Get all
+    public List<T> findAll() {
+        return new ArrayList<>(store.values());
     }
 
-    // Get item by index
-    public Optional<T> get(int index) {
-        if (index >= 0 && index < dataList.size()) {
-            return Optional.of(dataList.get(index));
-        }
-        return Optional.empty();
+    // Delete
+    public void delete(int id) {
+        store.remove(id);
     }
 
-    // Remove item
-    public boolean remove(T item) {
-        return dataList.remove(item);
+    // Exists check
+    public boolean exists(int id) {
+        return store.containsKey(id);
     }
 
-    // Update item at index
-    public boolean update(int index, T newItem) {
-        if (index >= 0 && index < dataList.size()) {
-            dataList.set(index, newItem);
-            return true;
-        }
-        return false;
+    // Count
+    public int count() {
+        return store.size();
     }
 
-    // Size
-    public int size() {
-        return dataList.size();
+    // Clear all (useful for testing/reset)
+    public void clear() {
+        store.clear();
     }
 }

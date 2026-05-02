@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * Entity class representing appointment
  */
-public class Appointment implements Cloneable {
+public class Appointment extends MedicalEntity implements Cloneable {
 
 
     @Override
@@ -36,11 +36,6 @@ public class Appointment implements Cloneable {
      * The appt time
      */
     private LocalDateTime appointmentTime;
-
-    /**
-     * The appt id
-     */
-    private final int appointmentId;
     
     private boolean completed;
     
@@ -57,10 +52,10 @@ public class Appointment implements Cloneable {
      * @param apptTime
      */
     public Appointment(Doctor doctor, Patient patient, LocalDateTime apptTime,String complaints) {
-        this.doctor = doctor;
+        super(IDGenerator.generateApptId());
+    	this.doctor = doctor;
         this.patient = patient;
         this.appointmentTime = apptTime;
-        this.appointmentId = IDGenerator.generateApptId();
         this.appointmentStatus = AppointmentStatus.CONFIRMED;
         this.symptoms = complaints;
     }
@@ -115,14 +110,7 @@ public class Appointment implements Cloneable {
         this.appointmentTime = apptTime;
     }
 
-    /**
-     * Get the appt ID
-     *
-     * @return
-     */
-    public int getApptId() {
-        return appointmentId;
-    }
+    
 
     /**
      * Get the doctor
@@ -178,8 +166,7 @@ public class Appointment implements Cloneable {
 	public void setSymptoms(String symptoms) {
 		this.symptoms = symptoms;
 	}
-    
-    
 
+	
 
 }

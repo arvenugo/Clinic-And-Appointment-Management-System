@@ -7,7 +7,7 @@ import java.util.*;
 public final class BillSummary {
 
     private final String billId;
-    private final String patientId;
+    private final int patientId;
     private final Map<String, BigDecimal> items;
     private final BigDecimal subTotal;
     private final BigDecimal tax;
@@ -15,7 +15,7 @@ public final class BillSummary {
     private final BigDecimal finalAmount;
     private final LocalDateTime createdAt;
 
-    public BillSummary(String patientId,
+    public BillSummary(int patientId,
                        Map<String, BigDecimal> items,
                        BigDecimal subTotal,
                        BigDecimal tax,
@@ -33,7 +33,7 @@ public final class BillSummary {
     }
 
     public String getBillId() { return billId; }
-    public String getPatientId() { return patientId; }
+    public int getPatientId() { return patientId; }
     public Map<String, BigDecimal> getItems() { return items; }
     public BigDecimal getSubTotal() { return subTotal; }
     public BigDecimal getTax() { return tax; }

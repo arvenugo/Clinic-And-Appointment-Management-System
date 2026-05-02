@@ -14,7 +14,7 @@ public class Doctor extends Person implements Cloneable {
     @Override
 	public String toString() {
 		
-		return "Doctor [doctorId=" + doctorId + ", Dr." + super.getName() + qualification + "specializes in "  + specialization +", has " + yearsOfExperince + 
+		return "Doctor [doctorId=" + super.getId() + ", Dr." + super.getName() + qualification + "specializes in "  + specialization +", has " + yearsOfExperince + 
 				" years of Experince. Their consulation fees is "+ consultationFees ;
 	}
 
@@ -28,11 +28,6 @@ public class Doctor extends Person implements Cloneable {
      * List of patient appointments for the doctor
      */
     private List<Appointment> listOfAppointments = new ArrayList<>();
-
-    /**
-     * doctor id
-     */
-    private final int doctorId;
 
     /**
      * Consultation  fees
@@ -55,9 +50,8 @@ public class Doctor extends Person implements Cloneable {
      */
     public Doctor(String name, int age, DoctorSpecialization specialization, double consultationFees,
     int yearsOfExperince,String qualification) {
-        super(name, age);
+        super(name, age,IDGenerator.generateDoctorId());
         this.specialization = specialization;
-        doctorId = IDGenerator.generateDoctorId();
         this.consultationFees = consultationFees;
         this.yearsOfExperince = yearsOfExperince;
         this.qualification = qualification;
@@ -73,8 +67,7 @@ public class Doctor extends Person implements Cloneable {
 	 */
 	public Doctor(int doctorId, DoctorSpecialization specialization, double consultationFees,
 			int yearsOfExperince) {
-		super();
-		this.doctorId = doctorId;
+		super(doctorId);
 		this.specialization = specialization;
 		this.consultationFees = consultationFees;
 		this.yearsOfExperince = yearsOfExperince;
@@ -135,15 +128,7 @@ public class Doctor extends Person implements Cloneable {
         listOfAppointments.remove(apt);
     }
 
-    /**
-     * Get the doctor ID
-     *
-     * @return
-     */
-    public int getDoctorId() {
-        return doctorId;
-    }
-
+    
     /**
      * Set specialization
      *
@@ -194,7 +179,7 @@ public class Doctor extends Person implements Cloneable {
 	public void setYearsOfExperince(int yearsOfExperince) {
 		this.yearsOfExperince = yearsOfExperince;
 	}
-    
-    
+
+	
 
 }
