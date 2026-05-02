@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.airtribe.meditrack.entity.Appointment;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.enums.DoctorSpecialization;
 
@@ -47,11 +46,11 @@ public class AIHelper {
     /**
      * Suggest doctor based on symptoms
      */
-    public static List<Doctor> suggestDoctor(Appointment appointment) {
+    public List<Doctor> suggestDoctor(String symptom) {
 
     	DataStore<Doctor> doctors = new DataStore<Doctor>();
     	return	doctors.getAll().stream().
-    		filter(d -> d.getSpecialization().equals(RULES.get(appointment.getSymptoms()))).collect(Collectors.toList());
+    		filter(d -> d.getSpecialization().equals(RULES.get(symptom))).collect(Collectors.toList());
        
     }
 

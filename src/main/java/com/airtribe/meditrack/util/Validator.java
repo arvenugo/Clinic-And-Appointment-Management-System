@@ -1,6 +1,8 @@
 package com.airtribe.meditrack.util;
 
 
+import com.airtribe.meditrack.entity.Doctor;
+import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.exception.InvalidDataException;
 
 import java.util.regex.Pattern;
@@ -20,29 +22,32 @@ public final class Validator {
     /**
      * Validates name
      */
-    public static void validateName(String name) {
+    public static boolean validateName(String name) {
         if (name == null || !NAME_PATTERN.matcher(name).matches()) {
-            throw new InvalidDataException("Invalid name. Only alphabets and spaces allowed (2-50 chars).");
+            return false;
         }
+        return true;
     }
 
     /**
      * Validates age
      */
-    public static void validateAge(int age) {
+    public static boolean validateAge(int age) {
         if (age <= 0 || age > 120) {
-            throw new InvalidDataException("Invalid age. Must be between 1 and 120.");
+            return false;
         }
+        return true;
     }
 
 
     /**
      * Validates non-null and non-empty string
      */
-    public static void validateNotEmpty(String value, String fieldName) {
+    public static boolean validateNotEmpty(String value, String fieldName) {
         if (value == null || value.trim().isEmpty()) {
-            throw new InvalidDataException(fieldName + " cannot be empty.");
+            return false;
         }
+        return true;
     }
 
     /**
@@ -52,6 +57,23 @@ public final class Validator {
         if (value <= 0) {
             throw new InvalidDataException(fieldName + " must be positive.");
         }
+    }
+    
+    public boolean validateDoctor(Doctor doctor) {
+    	if(doctor !=null && validateAge(doctor.getAge()) && validateName(doctor.getName())
+    			&& doctor.getConsultationFees() > 0) {
+    		return true;
+    	}
+    	return false;
+    	
+    }
+    
+    public boolean validatePatient(Patient patient) {
+    	if(patient !=null && validateAge(patient.getAge()) && validateName(patient.getName())
+    			) {
+    		return true;
+    	}
+    	return false;
     }
 
 

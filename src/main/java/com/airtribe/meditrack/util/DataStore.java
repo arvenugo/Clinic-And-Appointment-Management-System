@@ -9,7 +9,7 @@ public class DataStore<T> {
     private List<T> dataList;
 
     public DataStore() {
-        this.dataList = new ArrayList<>();
+        this.dataList = new ArrayList<T>();
     }
 
     // Add item

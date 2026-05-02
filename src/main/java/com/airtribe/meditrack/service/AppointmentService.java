@@ -28,7 +28,7 @@ public class AppointmentService {
     /**
      * Create Appointment
      */
-    public Appointment createAppointment(Patient patient, Doctor doctor, LocalDateTime dateTime, String complaints) throws InvalidDataException {
+    public Appointment createAppointment(Patient patient, Doctor doctor, LocalDateTime dateTime, String symptoms) throws InvalidDataException {
 
 
         if (dateTime == null || DateUtil.validateFutureOrToday(dateTime)) {
@@ -39,7 +39,7 @@ public class AppointmentService {
 
         Appointment appointment = new Appointment(doctor, patient,
 
-                dateTime, complaints);
+                dateTime, symptoms);
 
 
         appointmentMap.put(appointment.getApptId(), appointment);

@@ -10,6 +10,7 @@ import com.airtribe.meditrack.entity.Appointment;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.enums.DoctorSpecialization;
+import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.exception.InvalidDataException;
 
 public class CSVUtil {
@@ -26,10 +27,11 @@ public class CSVUtil {
 			        String[] values = line.split(",");
 			        String name = values[0];
 			        int age = Integer.parseInt(values[1]);
-			        String hospitalName = values[2];
-			        DoctorSpecialization doctorSpecialization = DoctorSpecialization.valueOf(values[3]);
+			        DoctorSpecialization doctorSpecialization = DoctorSpecialization.valueOf(values[2]);
 			        double consultationFees = Double.parseDouble(values[3]);
-			        Doctor doctor = new Doctor(name, age,hospitalName,doctorSpecialization,consultationFees);
+			        int yoe = Integer.parseInt(values[4]);
+			        String qualification = values[5];
+			        Doctor doctor = new Doctor(name, age,doctorSpecialization,consultationFees, yoe, qualification);
 			        doctorData.add(doctor);
 			   
 			    }
@@ -57,7 +59,9 @@ public class CSVUtil {
 			        String[] values = line.split(",");
 			        String name = values[0];
 			        int age = Integer.parseInt(values[1]);
-			        Patient patient = new Patient(name,age);
+			        String gender = values[2];
+			        Gender patientGender = Gender.valueOf(gender);
+			        Patient patient = new Patient(name,age,patientGender);
 			        patientData.add(patient);
 			    }
 			} catch (IOException e) {

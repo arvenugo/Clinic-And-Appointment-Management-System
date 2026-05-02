@@ -3,6 +3,7 @@ package com.airtribe.meditrack.test;
 
 import com.airtribe.meditrack.entity.*;
 import com.airtribe.meditrack.enums.DoctorSpecialization;
+import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.service.AppointmentService;
 import com.airtribe.meditrack.service.DoctorService;
 import com.airtribe.meditrack.service.PatientService;
@@ -22,13 +23,13 @@ public class TestRunner {
             System.out.println("*** Begin Tests****\n");
 
             // 2. Create Doctors
-            Doctor doc1 = doctorService.createDoctor("Arya", 30, "Baptist", DoctorSpecialization.CARDIOLOGY, 500.0);
-            Doctor doc2 = doctorService.createDoctor("Saroj", 30, "Fortis", DoctorSpecialization.NEUROLOGY, 1000.0);
+            Doctor doc1 = doctorService.createDoctor("Arya", 30, DoctorSpecialization.CARDIOLOGIST, 500.0, 5, "MD. CARDIOLODY");
+            Doctor doc2 = doctorService.createDoctor("Saroj", 30, DoctorSpecialization.NEUROLOGIST, 1000.0, 8 , "MD. NEUROLOGY");
             System.out.println("Registered Doctors: " + doc1.getName() + " and " + doc2.getName());
 
             // 3. Create Patients
-            Patient pat1 = patientService.createPatient("Rukmini", 50);
-            Patient pat2 = patientService.createPatient("Murali", 55);
+            Patient pat1 = patientService.createPatient("Rukmini", 50, Gender.MALE);
+            Patient pat2 = patientService.createPatient("Murali", 55, Gender.FEMALE);
             System.out.println("Registered Patients: " + pat1.getName() + " and " + pat2.getName());
 
             // 4. Set up Observers (Notifications)
@@ -51,7 +52,7 @@ public class TestRunner {
 
             // 6. Search Functionality
             System.out.println("\n*** Search for docs ***");
-            List<Doctor> cardiologists = doctorService.searchDoctor(DoctorSpecialization.CARDIOLOGY);
+            List<Doctor> cardiologists = doctorService.searchDoctor(DoctorSpecialization.CARDIOLOGIST);
             System.out.println("Found " + cardiologists.size() + " Cardiology specialists.");
 
             List<Patient> searchedPatients = patientService.search("Rukmini");

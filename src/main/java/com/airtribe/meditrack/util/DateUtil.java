@@ -22,9 +22,9 @@ public final class DateUtil {
     /**
      * Parse string to LocalDate
      */
-    public static LocalDate parseDate(String dateStr) {
+    public static LocalDateTime parseDate(String dateStr) {
         try {
-            return LocalDate.parse(dateStr, FORMATTER);
+            return LocalDateTime.parse(dateStr, FORMATTER);
         } catch (DateTimeParseException e) {
             throw new InvalidDataException("Invalid date format. Use yyyy-MM-dd");
         }

@@ -1,13 +1,15 @@
 package com.airtribe.meditrack.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.util.IDGenerator;
 
 /**
  * Entity class representing Patient
  */
-public class Patient extends Person implements Cloneable {
+public class Patient extends Person implements Cloneable{
 
 
     /**
@@ -19,6 +21,10 @@ public class Patient extends Person implements Cloneable {
      * Current appointment
      */
     private List<Appointment> appointments;
+    
+    private LocalDateTime registrationDate;
+    
+    private Gender gender;
 
     
 
@@ -26,12 +32,28 @@ public class Patient extends Person implements Cloneable {
 	 * @param name
 	 * @param age
 	 */
-	public Patient(String name, int age) {
+	public Patient(String name, int age, Gender gender) {
 		super(name, age);
 		this.patientId = IDGenerator.generatePatientId();
+		this.gender = gender;
+		this.registrationDate = LocalDateTime.now();
 	}
+	
+	
 
     /**
+	 * @param name
+	 * @param age
+	 * @param patientId
+	 */
+	public Patient(int patientId,String name, int age) {
+		super(name, age);
+		this.patientId = patientId;
+	}
+
+
+
+	/**
      * Clonable.
      *
      * @return
@@ -45,6 +67,8 @@ public class Patient extends Person implements Cloneable {
         	cloned.appointments.addAll(this.appointments);
 
         }
+        cloned.registrationDate = registrationDate;
+        cloned.gender = gender;
 
         return cloned;
     }

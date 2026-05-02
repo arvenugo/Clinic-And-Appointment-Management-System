@@ -15,17 +15,20 @@ public class IDGenerator {
     /**
      * counter obj for patient id
      */
-    private AtomicInteger patientIdCounter = new AtomicInteger(0);
+    private static AtomicInteger patientIdCounter = new AtomicInteger(0);
 
     /**
      * counter obj for appt id
      */
-    private  AtomicInteger apptIdCounter = new AtomicInteger(0);
+    private  static AtomicInteger apptIdCounter = new AtomicInteger(0);
+    
+    private  static AtomicInteger billIdCounter = new AtomicInteger(0);
 
     // Private constructor
     private IDGenerator() {
         patientIdCounter = new AtomicInteger(0);
-        appointmentIdCounter = new AtomicInteger(0);
+        apptIdCounter = new AtomicInteger(0);
+        billIdCounter = new AtomicInteger(0);
     }
  // Global access
     public static IDGenerator getInstance() {
@@ -64,5 +67,9 @@ public class IDGenerator {
      */
     public static int generateDoctorId() {
         return docIdCounter.incrementAndGet(); // thread-safe increment
+    }
+    
+    public static int generateBillId() {
+        return billIdCounter.incrementAndGet(); // thread-safe increment
     }
 }

@@ -1,5 +1,7 @@
 package com.airtribe.meditrack.entity;
 
+import com.airtribe.meditrack.enums.Gender;
+
 /**
  * Entity representing a person
  */
@@ -15,6 +17,8 @@ public class Person {
      * Age of the person
      */
     private int age;
+    
+    private Gender gender;
 
     /**
      * Constr.
@@ -26,8 +30,19 @@ public class Person {
         this.name = name;
         this.age = age;
     }
+    
+    
 
     /**
+	 * 
+	 */
+	public Person() {
+		super();
+	}
+
+
+
+	/**
      * Return name of the person
      *
      * @return String
