@@ -25,7 +25,16 @@ public class Patient extends Person implements Cloneable{
 
     
 
-    /**
+    @Override
+	public String toString() {
+		return "Patient [appointments=" + appointments + ", registrationDate=" + registrationDate + ", gender=" + gender
+				+ ", id=" + id + ", getName()=" + getName() + ", getAge()=" + getAge() + ", getGender()=" + getGender()
+				+ "]";
+	}
+
+
+
+	/**
 	 * @param name
 	 * @param age
 	 */

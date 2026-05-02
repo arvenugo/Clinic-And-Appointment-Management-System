@@ -44,13 +44,14 @@ public class Main {
                 }
             }
         }
-        
+        if(null!= filePath &&  !filePath.isBlank() && !filePath.isEmpty()) {
         if(filePath.contains("appointment")) {
         	CSVUtil.loadAppointments(filePath);
         }else if(filePath.contains("doctors")) {
         	CSVUtil.loadDoctors(filePath);
         }else if(filePath.contains("patient")) {
         	CSVUtil.loadPatients(filePath);
+        }
         }
 
         do {
@@ -61,7 +62,7 @@ public class Main {
             System.out.println("3. Create/View/Cancel Appointment");
             System.out.println("4. Search Doctor/Patient");
             System.out.println("5. Generate Bill");
-            System.out.println("5. Exit");
+            System.out.println("6. Exit");
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
@@ -97,11 +98,12 @@ public class Main {
     private static void manageDoctor(Scanner sc) {
         int subChoice;
         DoctorService doctorService = new DoctorService();
-        do {
+        while(true) {
             System.out.println("\n--- Manage Doctor ---");
             System.out.println("1. Add new Doctor");
             System.out.println("2. Update existing Doctor");
             System.out.println("3. Delete doctor");
+            System.out.println("0. Back to Main Menu");
             System.out.print("Enter choice: ");
             subChoice = sc.nextInt();
 
@@ -109,6 +111,7 @@ public class Main {
                 case 1:
                     System.out.println("*****Enter Doctor Data****");
                     System.out.println("Enter Doctor Name");
+                    sc.nextLine();
                     String name = sc.nextLine();
                     System.out.println("Enter Doctor Age");
                     int age = sc.nextInt();
@@ -117,6 +120,7 @@ public class Main {
                     System.out.println("Enter Doctor years of experince");
                     int yoe = sc.nextInt();
                     System.out.println("Enter Doctor specialization");
+                    sc.nextLine();
                     String specialization = sc.nextLine();
                     System.out.println("Enter Doctor qualification");
                     String qualification = sc.nextLine();
@@ -139,24 +143,26 @@ public class Main {
                     System.out.println("Enter doctor Id to delete");
                     int deleteDoctor = sc.nextInt();
                     doctorService.deleteDoctor(deleteDoctor);
-                case 4:
+                case 0:
                     System.out.println("Returning to main menu...");
                     break;
+               
                 default:
                     System.out.println("Invalid choice!");
             }
 
-        } while (subChoice != 3);
+        } 
     }
     
     private static void managePatient(Scanner sc) {
         int subChoice;
         PatientService patientService = new PatientService();
-        do {
+        while(true) {
             System.out.println("\n--- Manage Patient ---");
             System.out.println("1. Add new Pateint");
             System.out.println("2. Update existing Patient");
             System.out.println("3. Delete Patient");
+            System.out.println("0. Back to Main Menu");
             System.out.print("Enter choice: ");
             subChoice = sc.nextInt();
 
@@ -164,9 +170,11 @@ public class Main {
                 case 1:
                     System.out.println("*****Enter Patient Data****");
                     System.out.println("Enter Patient Name");
+                    sc.nextLine();
                     String name = sc.nextLine();
                     System.out.println("Enter Patient Age");
                     int age = sc.nextInt();
+                    sc.nextLine();
                     System.out.println("Enter Patient Gender (M/F/O)");
                     String gender = sc.nextLine().trim().toUpperCase();
                     
@@ -191,12 +199,14 @@ public class Main {
                     int patientIdToDelete = sc.nextInt();
                     patientService.deletePatient(patientIdToDelete);
                     break;
-                
+                case 0:
+                	System.out.println("Returning to main menu...");
+                	return;
                 default:
                     System.out.println("Invalid choice!");
             }
 
-        } while (subChoice != 3);
+        } 
     }
     
     private static void manageAppointment(Scanner sc) {
@@ -204,11 +214,12 @@ public class Main {
         PatientService patientService = new PatientService();
         DoctorService doctorService = new DoctorService();
         AppointmentService appointmentService = new AppointmentService();
-        do {
+        while(true) {
             System.out.println("\n--- Manage Appointment ---");
             System.out.println("1. Create new Appointment");
             System.out.println("2. View Appointment");
             System.out.println("3. Cancel Appointment");
+            System.out.println("0. Back to Main Menu");
             System.out.print("Enter choice: ");
             subChoice = sc.nextInt();
 
@@ -272,22 +283,27 @@ public class Main {
                 case 4:
                     System.out.println("Returning to main menu...");
                     break;
+                case 0:
+                	System.out.println("Returning to main menu...");
+                	return;
+                	
                 default:
                     System.out.println("Invalid choice!");
             }
 
-        } while (subChoice != 3);
+        }
     }
     
     private static void searchDoctorPatient(Scanner sc) {
         int subChoice;
         PatientService patientService = new PatientService();
         DoctorService doctorService = new DoctorService();
-        do {
+        while(true) {
             System.out.println("\n--- Search Doctor/Patient ---");
             System.out.println("1. Search doctor by id,name");
-            System.out.println("1. Search doctor by Specialization");
-            System.out.println("2. Search Patient by id,name");
+            System.out.println("2. Search doctor by Specialization");
+            System.out.println("3. Search Patient by id,name");
+            System.out.println("0. Back to Main Menu");
             System.out.print("Enter choice: ");
             subChoice = sc.nextInt();
 
@@ -295,12 +311,13 @@ public class Main {
                 case 1:
                     System.out.println("Search doctor");
                     System.out.println("Enter doctor id or name");
+                    sc.nextLine();
                     String doctorSearchString = sc.nextLine().trim();
                     try{
                     	int doctorInt = Integer.parseInt(doctorSearchString);
                     	Doctor doctor = doctorService.searchDoctor(doctorInt);
-                    	doctor.toString();
-                    }catch(NumberFormatException e) {
+                    	System.out.println(doctor);
+                    	}catch(NumberFormatException e) {
                     	List<Doctor> searcheddoctor = doctorService.searchDoctor(doctorSearchString);
                     	searcheddoctor.stream().forEach(System.out::println);
                     }
@@ -308,6 +325,7 @@ public class Main {
                 case 2:
                     System.out.println("Search doctor by Specialization");
                     System.out.println("Enter Specialization");
+                    sc.nextLine();
                     String specialization = sc.nextLine();
                     DoctorSpecialization doctorSpecialization = DoctorSpecialization.valueOf(specialization);
                     List<Doctor> searchedBySpecialization = doctorService.searchDoctor(doctorSpecialization);
@@ -316,6 +334,7 @@ public class Main {
                 case 3:
                     System.out.println("Search Patient");
                     System.out.println("Enter patient id or name");
+                    sc.nextLine();
                     String patientSearchString = sc.nextLine().trim();
                     try{
                     	int patientInt = Integer.parseInt(patientSearchString);
@@ -326,14 +345,14 @@ public class Main {
                     	searchedPatient.stream().forEach(System.out::println);
                     }
                     break;
-                case 4:
+                case 0:
                     System.out.println("Returning to main menu...");
-                    break;
+                    return;
                 default:
                     System.out.println("Invalid choice!");
             }
 
-        } while (subChoice != 3);
+        } 
     }
     
     private static void generateBill(Scanner sc) {
@@ -365,7 +384,7 @@ public class Main {
         BillingService billingService = new BillingService(billingStrategy);
         billingService.generateBill(bill);
         
-        
+        return;
         
        
         

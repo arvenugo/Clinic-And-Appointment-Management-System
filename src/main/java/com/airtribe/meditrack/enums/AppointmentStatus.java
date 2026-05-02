@@ -10,7 +10,7 @@ public enum AppointmentStatus {
         try {
             return AppointmentStatus.valueOf(input.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid gender: " + input);
+            throw new IllegalArgumentException("Invalid Appointment status: " + input);
         }
     }
 

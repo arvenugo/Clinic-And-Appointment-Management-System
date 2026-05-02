@@ -16,11 +16,19 @@ public enum Gender {
     }
     
     public static Gender parseGender(String input) {
-        try {
-            return Gender.valueOf(input.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid gender: " + input);
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Gender input cannot be null or empty");
         }
+
+        String value = input.trim().toUpperCase();
+
+        for (Gender gender : Gender.values()) {
+            if (gender.getCode().equalsIgnoreCase(value)) {
+                return gender;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid gender code: " + input);
     }
 
 }

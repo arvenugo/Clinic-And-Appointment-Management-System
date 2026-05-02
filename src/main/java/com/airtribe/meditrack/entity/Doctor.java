@@ -14,7 +14,7 @@ public class Doctor extends Person implements Cloneable {
     @Override
 	public String toString() {
 		
-		return "Doctor [doctorId=" + super.getId() + ", Dr." + super.getName() + qualification + "specializes in "  + specialization +", has " + yearsOfExperince + 
+		return "Doctor [doctorId=" + super.getId() + ", Dr. " + super.getName() + " " + qualification + " specializes in "  + specialization +", has " + yearsOfExperince + 
 				" years of Experince. Their consulation fees is "+ consultationFees ;
 	}
 
