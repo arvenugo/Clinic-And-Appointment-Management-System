@@ -10,7 +10,7 @@ public enum DoctorSpecialization {
         try {
             return DoctorSpecialization.valueOf(input.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid gender: " + input);
+            throw new IllegalArgumentException("Invalid specialization: " + input);
         }
     }
     
