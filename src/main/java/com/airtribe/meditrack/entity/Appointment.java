@@ -11,10 +11,16 @@ import java.time.LocalDateTime;
 public class Appointment implements Cloneable {
 
 
-    /**
+    @Override
+	public String toString() {
+		return "Appointment of Dr." + doctor.getName() + "is scheduled with patient "
+				+ patient.getName() + "for " + symptoms + " at " + appointmentTime ;
+	}
+
+	/**
      * Current appointment status
      */
-    private AppointmentStatus apptStatus;
+    private AppointmentStatus appointmentStatus;
 
     /**
      * Assigned doctor for the appointment
@@ -29,16 +35,18 @@ public class Appointment implements Cloneable {
     /**
      * The appt time
      */
-    private LocalDateTime apptTime;
+    private LocalDateTime appointmentTime;
 
     /**
      * The appt id
      */
-    private final int apptId;
+    private final int appointmentId;
     
     private boolean completed;
     
-    private String complaints;
+    private String symptoms;
+    
+    private Bill bill;
 
 
     /**
@@ -51,10 +59,10 @@ public class Appointment implements Cloneable {
     public Appointment(Doctor doctor, Patient patient, LocalDateTime apptTime,String complaints) {
         this.doctor = doctor;
         this.patient = patient;
-        this.apptTime = apptTime;
-        this.apptId = IDGenerator.generateApptId();
-        this.apptStatus = AppointmentStatus.CONFIRMED;
-        this.complaints = complaints;
+        this.appointmentTime = apptTime;
+        this.appointmentId = IDGenerator.generateApptId();
+        this.appointmentStatus = AppointmentStatus.CONFIRMED;
+        this.symptoms = complaints;
     }
 
     @Override
@@ -71,10 +79,10 @@ public class Appointment implements Cloneable {
         }
 
         // LocalDateTime is immutable → safe to assign directly
-        cloned.apptTime = this.apptTime;
+        cloned.appointmentTime = this.appointmentTime;
 
         // Enum is immutable → safe
-        cloned.apptStatus = this.apptStatus;
+        cloned.appointmentStatus = this.appointmentStatus;
 
         return cloned;
     }
@@ -85,7 +93,7 @@ public class Appointment implements Cloneable {
      * @return
      */
     public AppointmentStatus getApptStatus() {
-        return apptStatus;
+        return appointmentStatus;
     }
 
     /**
@@ -95,7 +103,7 @@ public class Appointment implements Cloneable {
      *
      */
     public void setApptStatus(AppointmentStatus apptStatus) {
-        this.apptStatus = apptStatus;
+        this.appointmentStatus = apptStatus;
     }
 
     /**
@@ -104,7 +112,7 @@ public class Appointment implements Cloneable {
      * @param apptTime
      */
     public void updateApptTime(LocalDateTime apptTime) {
-        this.apptTime = apptTime;
+        this.appointmentTime = apptTime;
     }
 
     /**
@@ -113,7 +121,7 @@ public class Appointment implements Cloneable {
      * @return
      */
     public int getApptId() {
-        return apptId;
+        return appointmentId;
     }
 
     /**
@@ -140,8 +148,38 @@ public class Appointment implements Cloneable {
      * @return
      */
     public LocalDateTime getApptTime() {
-        return apptTime;
+        return appointmentTime;
     }
+
+	/**
+	 * @return the completed
+	 */
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	/**
+	 * @param completed the completed to set
+	 */
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	/**
+	 * @return the symptoms
+	 */
+	public String getSymptoms() {
+		return symptoms;
+	}
+
+	/**
+	 * @param symptoms the symptoms to set
+	 */
+	public void setSymptoms(String symptoms) {
+		this.symptoms = symptoms;
+	}
+    
+    
 
 
 }

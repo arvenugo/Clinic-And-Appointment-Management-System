@@ -11,12 +11,14 @@ import java.util.List;
  */
 public class Doctor extends Person implements Cloneable {
 
-    /**
-     * Name of the hospital which the doc works for
-     */
-    private String hospitalName;
+    @Override
+	public String toString() {
+		
+		return "Doctor [doctorId=" + doctorId + ", Dr." + super.getName() + qualification + "specializes in "  + specialization +", has " + yearsOfExperince + 
+				" years of Experince. Their consulation fees is "+ consultationFees ;
+	}
 
-    /**
+	/**
      * Specialization of the doctor
      */
     private DoctorSpecialization specialization;
@@ -36,6 +38,10 @@ public class Doctor extends Person implements Cloneable {
      * Consultation  fees
      */
     private double consultationFees;
+    
+    private int yearsOfExperince;
+    
+    private String qualification;
 
 
     /**
@@ -47,50 +53,62 @@ public class Doctor extends Person implements Cloneable {
      * @param specialization
      * @param consultationFees
      */
-    public Doctor(String name, int age, String hospitalName, DoctorSpecialization specialization, double consultationFees
-    ) {
+    public Doctor(String name, int age, DoctorSpecialization specialization, double consultationFees,
+    int yearsOfExperince,String qualification) {
         super(name, age);
-        this.hospitalName = hospitalName;
         this.specialization = specialization;
         doctorId = IDGenerator.generateDoctorId();
         this.consultationFees = consultationFees;
+        this.yearsOfExperince = yearsOfExperince;
+        this.qualification = qualification;
 
     }
 
-    @Override
+    /**
+	 * @param name
+	 * @param age
+	 * @param specialization
+	 * @param consultationFees
+	 * @param yearsOfExperince
+	 */
+	public Doctor(int doctorId, DoctorSpecialization specialization, double consultationFees,
+			int yearsOfExperince) {
+		super();
+		this.doctorId = doctorId;
+		this.specialization = specialization;
+		this.consultationFees = consultationFees;
+		this.yearsOfExperince = yearsOfExperince;
+	}
+
+	@Override
     public Object clone() throws CloneNotSupportedException {
         Doctor cloned = (Doctor) super.clone();
-
-        cloned.hospitalName = hospitalName;
         cloned.specialization = specialization;
 
         cloned.consultationFees = consultationFees;
         cloned.listOfAppointments.addAll(this.listOfAppointments);
+        cloned.yearsOfExperince = yearsOfExperince;
 
         return cloned;
     }
 
+	
 
     /**
-     * Return the list of appointments of the patient
-     *
-     * @return List<Appointment>
-     */
-    public List<Appointment> listOfAppointments() {
-        return new ArrayList<>(listOfAppointments);
-    }
+	 * @return the listOfAppointments
+	 */
+	public List<Appointment> getListOfAppointments() {
+		return listOfAppointments;
+	}
 
+	/**
+	 * @param listOfAppointments the listOfAppointments to set
+	 */
+	public void setListOfAppointments(List<Appointment> listOfAppointments) {
+		this.listOfAppointments = listOfAppointments;
+	}
 
-    /**
-     * Return the hospital name
-     *
-     * @return
-     */
-    public String getHospitalName() {
-        return hospitalName;
-    }
-
-    /**
+	/**
      * Return the specialization of the doctor
      *
      * @return String
@@ -124,15 +142,6 @@ public class Doctor extends Person implements Cloneable {
      */
     public int getDoctorId() {
         return doctorId;
-    }
-
-    /**
-     * Set hospName
-     *
-     * @param hospitalName
-     */
-    public void setHospitalName(String hospitalName) {
-        this.hospitalName = hospitalName;
     }
 
     /**
@@ -171,5 +180,21 @@ public class Doctor extends Person implements Cloneable {
     public int getNumOfApts() {
         return listOfAppointments.size();
     }
+
+	/**
+	 * @return the yearsOfExperince
+	 */
+	public int getYearsOfExperince() {
+		return yearsOfExperince;
+	}
+
+	/**
+	 * @param yearsOfExperince the yearsOfExperince to set
+	 */
+	public void setYearsOfExperince(int yearsOfExperince) {
+		this.yearsOfExperince = yearsOfExperince;
+	}
+    
+    
 
 }

@@ -1,7 +1,8 @@
 package com.airtribe.meditrack.strategy;
 
-public interface BillingStrategy{
+import com.airtribe.meditrack.entity.Bill;
+import com.airtribe.meditrack.entity.BillSummary;
 
-    double calculate(double amount);
-
+public interface BillingStrategy {
+    BillSummary generate(Bill bill);
 }

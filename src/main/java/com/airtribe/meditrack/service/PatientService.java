@@ -2,6 +2,7 @@ package com.airtribe.meditrack.service;
 
 
 import com.airtribe.meditrack.entity.Patient;
+import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.Searchable;
 import com.airtribe.meditrack.util.Validator;
@@ -18,11 +19,11 @@ public class PatientService implements Searchable<Patient> {
     /**
      * Add Patient
      */
-    public Patient createPatient(String name, int age) throws InvalidDataException {
+    public Patient createPatient(String name, int age,Gender gender) throws InvalidDataException {
 
         Validator.validateName(name);
         Validator.validateAge(age);
-        Patient patient = new Patient(name, age);
+        Patient patient = new Patient(name, age, gender);
         patientMap.put(patient.getPatientId(), patient);
         return patient;
     }

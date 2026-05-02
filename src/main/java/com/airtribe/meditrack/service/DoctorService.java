@@ -8,7 +8,7 @@ import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.Searchable;
 import com.airtribe.meditrack.util.Validator;
 
-
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,12 +29,11 @@ public class DoctorService implements Searchable<Doctor> {
      * @param fees
      * @return
      */
-    public Doctor createDoctor(String name, int age, String hospName, DoctorSpecialization spec, double fees) throws InvalidDataException {
+    public Doctor createDoctor(String name, int age, DoctorSpecialization spec, double fees,int yearsOfExperince, String qualification) throws InvalidDataException {
         Validator.validateName(name);
         Validator.validateAge(age);
-       Validator.validateName(hospName);
 
-        Doctor doctor = new Doctor(name, age, hospName, spec, fees);
+        Doctor doctor = new Doctor(name, age, spec, fees,yearsOfExperince,qualification);
         doctorMap.put(doctor.getDoctorId(), doctor);
 
         return doctor;
@@ -66,13 +65,8 @@ public class DoctorService implements Searchable<Doctor> {
     public Doctor updateDoctor(int id, Doctor updatedDoctor) {
 
         Doctor existing = getDoctorById(id);
+        doctorMap.put(existing.getDoctorId(), updatedDoctor);
 
-
-        existing.setName(updatedDoctor.getName());
-        existing.setAge(updatedDoctor.getAge());
-        existing.setSpecialization(updatedDoctor.getSpecialization());
-        existing.setHospitalName(updatedDoctor.getHospitalName());
-        existing.setConsultationFees(updatedDoctor.getConsultationFees());
         return existing;
     }
 
@@ -83,6 +77,11 @@ public class DoctorService implements Searchable<Doctor> {
         if (!doctorMap.containsKey(id)) {
             throw new InvalidDataException("Cannot delete. Doctor not found: " + id);
         }
+        Doctor doctor = doctorMap.values().stream().filter(d -> d.getDoctorId() == id).findFirst().orElse(null);
+        if(doctor !=null && doctor.getListOfAppointments().stream().anyMatch(a -> a.getApptTime().isAfter(LocalDateTime.now()))) {
+        	throw new InvalidDataException("Doctor has future appointments, cannot delete now " + id);
+        }
+       
 
         doctorMap.remove(id);
     }
