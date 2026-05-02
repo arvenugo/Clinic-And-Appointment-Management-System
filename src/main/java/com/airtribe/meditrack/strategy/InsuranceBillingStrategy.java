@@ -17,7 +17,8 @@ public class InsuranceBillingStrategy implements BillingStrategy {
 		BigDecimal itemsTotal = bill.getItems().values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal subTotal = bill.getConsultationFee().add(itemsTotal);
+		BigDecimal subTotal = BigDecimal.valueOf(bill.getConsultationFee())
+                .add(itemsTotal);
         BigDecimal tax = subTotal.multiply(TAX);
 
         BigDecimal gross = subTotal.add(tax);
@@ -31,6 +32,6 @@ public class InsuranceBillingStrategy implements BillingStrategy {
                 gross.subtract(patientPays), // covered amount
                 patientPays
         );
-		return null;
+		
 	}
 }

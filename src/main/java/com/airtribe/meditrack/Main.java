@@ -1,19 +1,27 @@
 package com.airtribe.meditrack;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 import com.airtribe.meditrack.entity.Appointment;
+import com.airtribe.meditrack.entity.Bill;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.entity.Patient;
+import com.airtribe.meditrack.enums.BillingType;
 import com.airtribe.meditrack.enums.DoctorSpecialization;
 import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.service.AppointmentService;
+import com.airtribe.meditrack.service.BillingService;
 import com.airtribe.meditrack.service.DoctorService;
 import com.airtribe.meditrack.service.PatientService;
+import com.airtribe.meditrack.strategy.BillingStrategy;
+import com.airtribe.meditrack.strategy.EmergencyBillingStrategy;
+import com.airtribe.meditrack.strategy.InsuranceBillingStrategy;
+import com.airtribe.meditrack.strategy.StandardBillingStrategy;
 import com.airtribe.meditrack.util.AIHelper;
+import com.airtribe.meditrack.util.CSVUtil;
 import com.airtribe.meditrack.util.DateUtil;
 
 public class Main {
@@ -21,6 +29,29 @@ public class Main {
     public static void main(String[] args) {
     	Scanner sc = new Scanner(System.in);
         int choice;
+        
+        String filePath = null;
+
+        if (args != null) {
+            for (String arg : args) {
+                if (arg != null && arg.startsWith("--loadData=")) {
+                    String[] parts = arg.split("=", 2);
+                    if (parts.length == 2 && !parts[1].isEmpty()) {
+                        filePath = parts[1];
+                    } else {
+                        throw new IllegalArgumentException("Invalid --loadData argument");
+                    }
+                }
+            }
+        }
+        
+        if(filePath.contains("appointment")) {
+        	CSVUtil.loadAppointments(filePath);
+        }else if(filePath.contains("doctors")) {
+        	CSVUtil.loadDoctors(filePath);
+        }else if(filePath.contains("patient")) {
+        	CSVUtil.loadPatients(filePath);
+        }
 
         do {
             // Main Menu
@@ -42,13 +73,13 @@ public class Main {
                 	managePatient(sc);
                     break;
                 case 3:
-                	managePatient(sc);
-                	break;
-                case 4:
                 	manageAppointment(sc);
                 	break;
-                case 5:
+                case 4:
                 	searchDoctorPatient(sc);
+                	break;
+                case 5:
+                	generateBill(sc);
                 	break;
                 case 6:
                     System.out.println("Exiting...");
@@ -87,10 +118,9 @@ public class Main {
                     int yoe = sc.nextInt();
                     System.out.println("Enter Doctor specialization");
                     String specialization = sc.nextLine();
-                    DoctorSpecialization doctorSpecialization = DoctorSpecialization.valueOf(specialization);
                     System.out.println("Enter Doctor qualification");
                     String qualification = sc.nextLine();
-                    doctorService.createDoctor(name, age, doctorSpecialization, consultationFees, yoe,qualification);
+                    doctorService.createDoctor(name, age, DoctorSpecialization.parseEnum(specialization), consultationFees, yoe,qualification);
                     break;
                 case 2:
                 	System.out.println("Enter Doctor Id to update");
@@ -101,8 +131,8 @@ public class Main {
                     int yoeUpdate = sc.nextInt();
                     System.out.println("Enter Doctor specialization");
                     String specializationUpdate = sc.nextLine();
-                    DoctorSpecialization doctorSpecializationUpdate = DoctorSpecialization.valueOf(specializationUpdate);
-                    Doctor doctorUpdate = new Doctor(updateDoctor,doctorSpecializationUpdate,consultationFeesUpdate,yoeUpdate);
+                    
+                    Doctor doctorUpdate = new Doctor(updateDoctor,DoctorSpecialization.parseEnum(specializationUpdate),consultationFeesUpdate,yoeUpdate);
                     doctorService.updateDoctor(updateDoctor,doctorUpdate);
                     break;
                 case 3:
@@ -140,7 +170,7 @@ public class Main {
                     System.out.println("Enter Patient Gender (M/F/O)");
                     String gender = sc.nextLine().trim().toUpperCase();
                     
-                    patientService.createPatient(name, age, Gender.valueOf(gender));
+                    patientService.createPatient(name, age, Gender.parseGender(gender));
                     break;
                 case 2:
                     System.out.println("******Update Patient******");
@@ -212,7 +242,7 @@ public class Main {
                     int id = sc.nextInt();
                     if(id ==1) {
                     	doctorService.getAllDoctors().stream()
-                        .filter(d -> id == d.getDoctorId())
+                        .filter(d -> id == d.getId())
                         .findFirst()
                         .ifPresent(d ->
                             d.getListOfAppointments().stream()
@@ -222,7 +252,7 @@ public class Main {
                     }else if (id == 2) {
                     	patientService.getAllPatients()
                     	.stream()
-                        .filter(p -> id == p.getPatientId())
+                        .filter(p -> id == p.getId())
                         .findFirst()
                         .ifPresent(p ->
                             p.getAppointments()
@@ -307,9 +337,34 @@ public class Main {
     }
     
     private static void generateBill(Scanner sc) {
-        int subChoice;
+       
+        AppointmentService appointmentService = new AppointmentService();
         System.out.println("Enter appointment id to generate bill");
-        System.out.println("Patient type: In-patient , Out-patient");
+        int appointmentId = sc.nextInt();
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        System.out.println("Enter billing type (Standard, Insurance, Emergency)");
+        String billingType = sc.nextLine();
+        System.out.println("Enter Medicine charges");
+        BigDecimal medicineChargesBD = sc.nextBigDecimal();
+        System.out.println("Enter Room rental charges");
+        BigDecimal roomRentalCharges = sc.nextBigDecimal();
+        
+        BillingType billingTypeEnum = BillingType.valueOf(billingType);
+        BillingStrategy billingStrategy= null;
+        if(billingTypeEnum.equals(BillingType.STANDARD)) {
+        	billingStrategy = new StandardBillingStrategy();
+        }else if(billingTypeEnum.equals(BillingType.INSURANCE)) {
+        	billingStrategy = new InsuranceBillingStrategy();
+        }else if(billingTypeEnum.equals(BillingType.EMERGENCY)) {
+        	billingStrategy = new EmergencyBillingStrategy();
+        }
+        Bill bill = new Bill(appointment.getPatient().getId(), appointment.getDoctor().getConsultationFees());
+        bill.addItem("Medicine", medicineChargesBD);
+        bill.addItem("Room Rental Charges", roomRentalCharges);
+        
+        BillingService billingService = new BillingService(billingStrategy);
+        billingService.generateBill(bill);
+        
         
         
        

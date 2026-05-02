@@ -5,6 +5,8 @@ import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.enums.Gender;
 import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.Searchable;
+import com.airtribe.meditrack.util.DataStore;
+import com.airtribe.meditrack.util.DataStoreRegistry;
 import com.airtribe.meditrack.util.Validator;
 
 
@@ -13,8 +15,7 @@ import java.util.stream.Collectors;
 
 public class PatientService implements Searchable<Patient> {
 
-    // In-memory storage
-    private Map<Integer, Patient> patientMap = new HashMap<>();
+	static DataStore<Patient> patientData = DataStoreRegistry.getPatientStore();
 
     /**
      * Add Patient
@@ -24,7 +25,7 @@ public class PatientService implements Searchable<Patient> {
         Validator.validateName(name);
         Validator.validateAge(age);
         Patient patient = new Patient(name, age, gender);
-        patientMap.put(patient.getPatientId(), patient);
+        patientData.save(patient);
         return patient;
     }
 
@@ -32,20 +33,20 @@ public class PatientService implements Searchable<Patient> {
      * Get Patient by ID
      */
     public Patient getPatientById(int id) {
-        Patient patient = patientMap.get(id);
+        Optional<Patient> patient = patientData.findById(id);
 
         if (patient == null) {
             throw new InvalidDataException("Patient not found with id: " + id);
         }
 
-        return patient;
+        return patient.get();
     }
 
     /**
      * Get All Patients
      */
     public List<Patient> getAllPatients() {
-        return new ArrayList<>(patientMap.values());
+        return patientData.findAll();
     }
 
     /**
@@ -69,11 +70,11 @@ public class PatientService implements Searchable<Patient> {
      * Delete Patient
      */
     public void deletePatient(int id) {
-        if (!patientMap.containsKey(id)) {
+        if (patientData.findById(id).isEmpty()) {
             throw new InvalidDataException("Cannot delete. Patient not found: " + id);
         }
 
-        patientMap.remove(id);
+        patientData.delete(id);
     }
 
     /**
@@ -87,7 +88,7 @@ public class PatientService implements Searchable<Patient> {
      * Search by Name (Overloading)
      */
     public List<Patient> searchPatient(String name) {
-        return patientMap.values()
+        return patientData.findAll()
                 .stream()
                 .filter(p -> p.getName().equalsIgnoreCase(name))
                 .collect(Collectors.toList());
@@ -97,7 +98,7 @@ public class PatientService implements Searchable<Patient> {
      * Search by Age (Overloading)
      */
     public List<Patient> searchPatient(int minAge, int maxAge) {
-        return patientMap.values()
+        return patientData.findAll()
                 .stream()
                 .filter(p -> p.getAge() >= minAge && p.getAge() <= maxAge)
                 .collect(Collectors.toList());
@@ -113,7 +114,7 @@ public class PatientService implements Searchable<Patient> {
             throw new InvalidDataException("Invalid search keyword");
         }
 
-        return patientMap.values()
+        return patientData.findAll()
                 .stream()
                 .filter(p -> p.getName().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());

@@ -15,11 +15,13 @@ import com.airtribe.meditrack.exception.InvalidDataException;
 
 public class CSVUtil {
 	
-	static DataStore<Patient> patientData = new DataStore<Patient>();
-	static DataStore<Doctor> doctorData = new DataStore<Doctor>();
+	static DataStore<Patient> patientData = DataStoreRegistry.getPatientStore();
+	static DataStore<Appointment> appointmentData = DataStoreRegistry.getAppointmentStore();
+	static DataStore<Doctor> doctorData = DataStoreRegistry.getDoctorStore();
 	
-	public static void loadDoctors() {
-		try (BufferedReader br = new BufferedReader(new FileReader("doctors.csv"))) {
+	
+	public static void loadDoctors(String filePath) {
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 		    String line;
 		    try {
 				br.readLine();
@@ -32,11 +34,11 @@ public class CSVUtil {
 			        int yoe = Integer.parseInt(values[4]);
 			        String qualification = values[5];
 			        Doctor doctor = new Doctor(name, age,doctorSpecialization,consultationFees, yoe, qualification);
-			        doctorData.add(doctor);
+			        doctorData.save(doctor);
 			   
 			    }
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.err.println("Error occured in opening file");
 				e.printStackTrace();
 			 
 		    
@@ -45,13 +47,13 @@ public class CSVUtil {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			System.err.println("Error occured in opening file");
 			e1.printStackTrace();
 		}
 	}
 	
-	public static void loadPatients() {
-		try (BufferedReader br = new BufferedReader(new FileReader("patient.csv"))) {
+	public static void loadPatients(String filePath) {
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 		    String line;
 		    try {
 				br.readLine();
@@ -62,10 +64,11 @@ public class CSVUtil {
 			        String gender = values[2];
 			        Gender patientGender = Gender.valueOf(gender);
 			        Patient patient = new Patient(name,age,patientGender);
-			        patientData.add(patient);
+			        patientData.save(patient);
+			        
 			    }
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				System.err.println("Error occured in opening file");
 				e.printStackTrace();
 			 
 		    
@@ -74,31 +77,32 @@ public class CSVUtil {
 			System.err.println("Error occured while reading file");
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			System.err.println("Error occured in opening file");
 			e1.printStackTrace();
 		}
 	}
 		
-		public static void loadAppointments() {
-			try (BufferedReader br = new BufferedReader(new FileReader("appointment.csv"))) {
+		public static void loadAppointments(String filePath) {
+			try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			    String line;
 			    try {
 					br.readLine();
 				    while ((line = br.readLine()) != null) {
 				        String[] values = line.split(",");
 				        int doctorId = Integer.parseInt(values[0]);
-				        Doctor doctor = doctorData.getAll().stream().filter(d -> d.getDoctorId() == doctorId).findFirst().orElse(null);
+				        Doctor doctor = doctorData.findAll().stream().filter(d -> d.getId() == doctorId).findFirst().orElse(null);
 				        int patientId = Integer.parseInt(values[1]);
-				        Patient patient = patientData.getAll().stream().filter(p -> p.getPatientId() == patientId).findFirst().orElse(null);
+				        Patient patient = patientData.findAll().stream().filter(p -> p.getId() == patientId).findFirst().orElse(null);
 				        LocalDateTime appointmentTime = LocalDateTime.parse(values[2]);
 				        String complaints = values[3];
 				        if(doctor == null || patient == null) {
 				        	throw new InvalidDataException("Invalid doctorId or PatientId");
 				        }
 				        Appointment appointment = new Appointment(doctor,patient,appointmentTime,complaints);
+				        appointmentData.save(appointment);
 				    }
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					System.err.println("Error occured in opening file");
 					e.printStackTrace();
 				 
 			    
@@ -107,7 +111,7 @@ public class CSVUtil {
 				System.err.println("Error occured while reading file");
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				System.err.println("Error occured in opening file");
 				e1.printStackTrace();
 			}
 	}

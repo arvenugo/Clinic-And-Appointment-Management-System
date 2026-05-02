@@ -35,8 +35,8 @@ public class AIHelper {
         RULES.put("back pain", DoctorSpecialization.ORTHOPEDIC);
 
         // Children
-        RULES.put("baby fever", DoctorSpecialization.PAEDIATRICIAN);
-        RULES.put("child cough", DoctorSpecialization.PAEDIATRICIAN);
+        RULES.put("baby fever", DoctorSpecialization.PEDIATRICIAN);
+        RULES.put("child cough", DoctorSpecialization.PEDIATRICIAN);
 
         // Women's health
         RULES.put("pregnancy", DoctorSpecialization.GYNECOLOGIST);
@@ -49,7 +49,7 @@ public class AIHelper {
     public List<Doctor> suggestDoctor(String symptom) {
 
     	DataStore<Doctor> doctors = new DataStore<Doctor>();
-    	return	doctors.getAll().stream().
+    	return	doctors.findAll().stream().
     		filter(d -> d.getSpecialization().equals(RULES.get(symptom))).collect(Collectors.toList());
        
     }

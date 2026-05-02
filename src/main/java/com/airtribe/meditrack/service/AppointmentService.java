@@ -1,13 +1,12 @@
 package com.airtribe.meditrack.service;
 
-import com.airtribe.meditrack.entity.Appointment;
-
-
 import com.airtribe.meditrack.entity.*;
 import com.airtribe.meditrack.enums.AppointmentStatus;
 import com.airtribe.meditrack.exception.AppointmentNotFoundException;
 import com.airtribe.meditrack.exception.InvalidDataException;
 import com.airtribe.meditrack.interfaces.AppointmentObserver;
+import com.airtribe.meditrack.util.DataStore;
+import com.airtribe.meditrack.util.DataStoreRegistry;
 import com.airtribe.meditrack.util.DateUtil;
 
 
@@ -18,7 +17,7 @@ import java.util.*;
 public class AppointmentService {
 
     // Map to store appointments
-    private Map<Integer, Appointment> appointmentMap = new HashMap<>();
+	static DataStore<Appointment> appointmentData = DataStoreRegistry.getAppointmentStore();
 
     /**
      * List of appt observers
@@ -42,7 +41,7 @@ public class AppointmentService {
                 dateTime, symptoms);
 
 
-        appointmentMap.put(appointment.getApptId(), appointment);
+        appointmentData.save(appointment);
         doctor.addAppointment(appointment);
         patient.addAppointment(appointment);
         notifyObservers("Appointment created", appointment);
@@ -53,13 +52,13 @@ public class AppointmentService {
      * Get Appointment by ID
      */
     public Appointment getAppointmentById(int id) throws AppointmentNotFoundException {
-        Appointment appt = appointmentMap.get(id);
+        Optional<Appointment> appt = appointmentData.findById(id);
 
-        if (appt == null) {
+        if (appt.isEmpty()) {
             throw new AppointmentNotFoundException("Appointment not found with id: " + id);
         }
 
-        return appt;
+        return appt.get();
     }
 
     /**
@@ -68,7 +67,7 @@ public class AppointmentService {
     public List<Appointment> getAllAppointments() {
 
         Comparator<Appointment> dateComparator = Comparator.comparing(Appointment::getApptTime);
-        List<Appointment> apptList = new ArrayList<>(appointmentMap.values());
+        List<Appointment> apptList = new ArrayList<>(appointmentData.findAll());
         apptList.sort(dateComparator);
         return apptList;
     }
@@ -77,7 +76,7 @@ public class AppointmentService {
      * Cancel Appointment
      */
     public void cancelAppointment(int id) throws AppointmentNotFoundException {
-        if (!appointmentMap.containsKey(id)) {
+        if (appointmentData.findById(id).isEmpty()) {
             throw new AppointmentNotFoundException("Cannot delete. Appointment not found: " + id);
         }
         Appointment appt = getAppointmentById(id);
